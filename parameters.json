@@ -1,0 +1,17 @@
+{
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "workflows_cosmosdb_document_prod_logs_name": {
+            "value": null
+        },
+        "workspaces_LogAnCosmosDB_externalid": {
+            "value": null
+        },
+        "connections_office365_externalid": {
+            "value": null
+        },
+        "connections_azureautomation_externalid": {
+            "value": null
+        }
+    }
+}

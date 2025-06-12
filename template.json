@@ -1,0 +1,633 @@
+{
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "workflows_cosmosdb_document_prod_logs_name": {
+            "type": "String"
+        },
+        "workspaces_LogAnCosmosDB_externalid": {
+            "type": "String"
+        },
+        "connections_office365_externalid": {
+            "type": "String"
+        },
+        "connections_azureautomation_externalid": {
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Logic/workflows",
+            "apiVersion": "2017-07-01",
+            "location": "eastus2",
+            "tags": {
+                "ResourceType": "Alert",
+                "Environment": "Prod",
+                "ApplicationType  ": "DataR",
+                "Owner": "SDPD",
+            },
+            "properties": {
+                "state": "Enabled",
+                "definition": {
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {
+                        "$connections": {
+                            "defaultValue": {},
+                            "type": "Object"
+                        }
+                    },
+                    "triggers": {
+                        "HTTP_request_Alert": {
+                            "type": "Request",
+                            "kind": "Http",
+                            "inputs": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "schemaId": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "essentials": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "alertId": {
+                                                            "type": "string"
+                                                        },
+                                                        "alertRule": {
+                                                            "type": "string"
+                                                        },
+                                                        "severity": {
+                                                            "type": "string"
+                                                        },
+                                                        "signalType": {
+                                                            "type": "string"
+                                                        },
+                                                        "monitorCondition": {
+                                                            "type": "string"
+                                                        },
+                                                        "monitoringService": {
+                                                            "type": "string"
+                                                        },
+                                                        "alertTargetIDs": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "type": "string"
+                                                            }
+                                                        },
+                                                        "configurationItems": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "type": "string"
+                                                            }
+                                                        },
+                                                        "originAlertId": {
+                                                            "type": "string"
+                                                        },
+                                                        "firedDateTime": {
+                                                            "type": "string"
+                                                        },
+                                                        "description": {
+                                                            "type": "string"
+                                                        },
+                                                        "essentialsVersion": {
+                                                            "type": "string"
+                                                        },
+                                                        "alertContextVersion": {
+                                                            "type": "string"
+                                                        },
+                                                        "investigationLink": {
+                                                            "type": "string"
+                                                        }
+                                                    }
+                                                },
+                                                "alertContext": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "properties": {},
+                                                        "conditionType": {
+                                                            "type": "string"
+                                                        },
+                                                        "condition": {
+                                                            "type": "object",
+                                                            "properties": {
+                                                                "windowSize": {
+                                                                    "type": "string"
+                                                                },
+                                                                "allOf": {
+                                                                    "type": "array",
+                                                                    "items": {
+                                                                        "type": "object",
+                                                                        "properties": {
+                                                                            "metricName": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "metricNamespace": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "operator": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "threshold": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "timeAggregation": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "dimensions": {
+                                                                                "type": "array",
+                                                                                "items": {
+                                                                                    "type": "object",
+                                                                                    "properties": {
+                                                                                        "name": {
+                                                                                            "type": "string"
+                                                                                        },
+                                                                                        "value": {
+                                                                                            "type": "string"
+                                                                                        }
+                                                                                    },
+                                                                                    "required": [
+                                                                                        "name",
+                                                                                        "value"
+                                                                                    ]
+                                                                                }
+                                                                            },
+                                                                            "metricValue": {
+                                                                                "type": "number"
+                                                                            },
+                                                                            "webTestName": {}
+                                                                        },
+                                                                        "required": [
+                                                                            "metricName",
+                                                                            "metricNamespace",
+                                                                            "operator",
+                                                                            "threshold",
+                                                                            "timeAggregation",
+                                                                            "dimensions",
+                                                                            "metricValue",
+                                                                            "webTestName"
+                                                                        ]
+                                                                    }
+                                                                },
+                                                                "windowStartTime": {
+                                                                    "type": "string"
+                                                                },
+                                                                "windowEndTime": {
+                                                                    "type": "string"
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                },
+                                                "customProperties": {}
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "actions": {
+                        "GET_Token": {
+                            "runAfter": {
+                                "Compose_String_to_Int": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "Http",
+                            "inputs": {
+                                "method": "POST",
+                                "headers": {
+                                    "Content-Type": "application/x-www-form-urlencoded"
+                                },
+                            }
+                        },
+                        "Condition_cosmos_429": {
+                            "actions": {
+                                "Activa_logs_CosmosDB2-2": {
+                                    "type": "Http",
+                                    "inputs": {
+                                        "method": "PUT",
+                                        "headers": {
+                                            "Content-Type": "application/json",
+                                            "Authorization": "Bearer @{body('Parse_JSON')?['access_token']}"
+                                        },
+                                        "body": {
+                                            "properties": {
+                                                "logs": [
+                                                    {
+                                                        "category": "DataPlaneRequests",
+                                                        "enabled": true,
+                                                        "destinationTable": "ResourceSpecific"
+                                                    },
+                                                    {
+                                                        "category": "QueryRuntimeStatistics",
+                                                        "enabled": true,
+                                                        "destinationTable": "ResourceSpecific"
+                                                    },
+                                                    {
+                                                        "category": "PartitionKeyStatistics",
+                                                        "enabled": true,
+                                                        "destinationTable": "ResourceSpecific"
+                                                    },
+                                                    {
+                                                        "category": "PartitionKeyRUConsumption",
+                                                        "enabled": true,
+                                                        "destinationTable": "ResourceSpecific"
+                                                    }
+                                                ],
+                                                "metrics": [
+                                                    {
+                                                        "category": "AllMetrics",
+                                                        "enabled": true,
+                                                        "retentionPolicy": {
+                                                            "enabled": false,
+                                                            "days": 0
+                                                        },
+                                                        "destinationTable": "ResourceSpecific"
+                                                    }
+                                                ],
+                                                "workspaceId": "[parameters('workspaces_LogAnCosmosDB_externalid')]"
+                                            }
+                                        }
+                                    }
+                                },
+                                "Aumentar_RUs2-2": {
+                                    "runAfter": {
+                                        "Activa_logs_CosmosDB2-2": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "Http",
+                                    "inputs": {
+                                        "method": "PUT",
+                                        "headers": {
+                                            "Content-Type": "application/json",
+                                            "Authorization": "Bearer @{body('Parse_JSON')?['access_token']}"
+                                        },
+                                        "body": {
+                                            "properties": {
+                                                "resource": {
+                                                    "autoscaleSettings": {
+                                                        "maxThroughput": 900000
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "Send_an_email_Aumento": {
+                                    "runAfter": {
+                                        "Aumentar_RUs2-2": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "ApiConnection",
+                                    "inputs": {
+                                        "host": {
+                                            "connection": {
+                                                "name": "@parameters('$connections')['office365']['connectionId']"
+                                            }
+                                        },
+                                        "method": "post",
+                                        "body": {
+                                            "Subject": "Automatizacion Aumento RUs Poison @{outputs('Compose_Formatea_cadena_String')} ",
+                                            "Importance": "Normal"
+                                        },
+                                        "path": "/v2/Mail"
+                                    }
+                                }
+                            },
+                            "runAfter": {
+                                "Condition_Validador_Cola_Poison": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "else": {
+                                "actions": {
+                                    "Disminuir_RUs": {
+                                        "runAfter": {
+                                            "Elimina_logs_CosmosDB": [
+                                                "Succeeded"
+                                            ]
+                                        },
+                                        "type": "Http",
+                                        "inputs": {
+                                            "method": "PUT",
+                                            "headers": {
+                                                "Content-Type": "application/json",
+                                                "Authorization": "Bearer @{body('Parse_JSON')?['access_token']}"
+                                            },
+                                            "body": {
+                                                "properties": {
+                                                    "resource": {
+                                                        "autoscaleSettings": {
+                                                            "maxThroughput": 500000
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "Elimina_logs_CosmosDB": {
+                                        "type": "Http",
+                                        "inputs": {
+                                            "method": "DELETE",
+                                            "headers": {
+                                                "Content-Type": "application/json",
+                                                "Authorization": "Bearer @{body('Parse_JSON')?['access_token']}"
+                                            }
+                                        }
+                                    },
+                                    "Send_an_email_Disminuye": {
+                                        "runAfter": {
+                                            "Disminuir_RUs": [
+                                                "Succeeded"
+                                            ]
+                                        },
+                                        "type": "ApiConnection",
+                                        "inputs": {
+                                            "host": {
+                                                "connection": {
+                                                }
+                                            },
+                                            "method": "post",
+                                            "body": {
+                                                "To": "williamssteven.cuellarnaranj@kyndryl.com\n",
+                                                "Subject": "Automatizacion Disminuye RUs Poison @{outputs('Compose_Formatea_cadena_String')} ",
+                                                "Importance": "Normal"
+                                            },
+                                            "path": "/v2/Mail"
+                                        }
+                                    }
+                                }
+                            },
+                            "expression": {
+                                "and": [
+                                    {
+                                        "equals": [
+                                            "@triggerBody()?['data']?['essentials']?['monitorCondition']",
+                                            "Fired"
+                                        ]
+                                    }
+                                ]
+                            },
+                            "type": "If"
+                        },
+                        "Parse_JSON": {
+                            "runAfter": {
+                                "GET_Token": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ParseJson",
+                            "inputs": {
+                                "content": "@body('GET_Token')",
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "token_type": {
+                                            "type": "string"
+                                        },
+                                        "access_token": {
+                                            "type": "string"
+                                        },
+                                        "expires_in": {
+                                            "type": "string"
+                                        },
+                                        "ext_expires_in": {
+                                            "type": "string"
+                                        },
+                                        "expires_on": {
+                                            "type": "string"
+                                        },
+                                        "not_before": {
+                                            "type": "string"
+                                        },
+                                        "resource": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "Create_job": {
+                            "runAfter": {
+                                "Initialize_variables": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['azureautomation']['connectionId']"
+                                    }
+                                },
+                                "method": "put",
+                                "queries": {
+                                    "x-ms-api-version": "2015-10-31",
+                                    "runbookName": "CheckQueueCount",
+                                    "wait": true
+                                }
+                            }
+                        },
+                        "Get_job_output": {
+                            "runAfter": {
+                                "Create_job": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "host": {
+                                    "connection": {
+                                    }
+                                },
+                                "method": "get",
+                                "queries": {
+                                    "x-ms-api-version": "2015-10-31"
+                                }
+                            }
+                        },
+                        "Initialize_variables": {
+                            "runAfter": {},
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "CantidadResistrosCosmos",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
+                        "Set_variable": {
+                            "runAfter": {
+                                "Get_job_output": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "SetVariable",
+                            "inputs": {
+                                "name": "CantidadResistrosCosmos",
+                                "value": "@{body('Get_job_output')}"
+                            }
+                        },
+                        "Compose_Formatea_cadena_String": {
+                            "runAfter": {
+                                "Set_variable": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "Compose",
+                            "inputs": "@last(split(trim(variables('CantidadResistrosCosmos')), '\r\n'))"
+                        },
+                        "Compose_String_to_Int": {
+                            "runAfter": {
+                                "Compose_Formatea_cadena_String": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "Compose",
+                            "inputs": "@int(outputs('Compose_Formatea_cadena_String'))"
+                        },
+                        "Condition_Validador_Cola_Poison": {
+                            "actions": {
+                                "Send_an_email_429": {
+                                    "type": "ApiConnection",
+                                    "inputs": {
+                                        "host": {
+                                            "connection": {
+                                                "name": "@parameters('$connections')['office365']['connectionId']"
+                                            }
+                                        },
+                                        "method": "post",
+                                        "body": {
+                                            "Subject": "Automatizacion Aumento RUs Poison @{outputs('Compose_Formatea_cadena_String')}",
+                                            "Importance": "Normal"
+                                        },
+                                        "path": "/v2/Mail"
+                                    }
+                                },
+                                "Aumentar_RUs2": {
+                                    "runAfter": {
+                                        "Activa_logs_CosmosDB2": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "Http",
+                                    "inputs": {
+                                        "method": "PUT",
+                                        "headers": {
+                                            "Content-Type": "application/json",
+                                            "Authorization": "Bearer @{body('Parse_JSON')?['access_token']}"
+                                        },
+                                        "body": {
+                                            "properties": {
+                                                "resource": {
+                                                    "autoscaleSettings": {
+                                                        "maxThroughput": 700000
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "Activa_logs_CosmosDB2": {
+                                    "runAfter": {
+                                        "Send_an_email_429": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "Http",
+                                    "inputs": {
+                                        "method": "PUT",
+                                        "headers": {
+                                            "Content-Type": "application/json",
+                                            "Authorization": "Bearer @{body('Parse_JSON')?['access_token']}"
+                                        },
+                                        "body": {
+                                            "properties": {
+                                                "logs": [
+                                                    {
+                                                        "category": "DataPlaneRequests",
+                                                        "enabled": true,
+                                                        "destinationTable": "ResourceSpecific"
+                                                    },
+                                                    {
+                                                        "category": "QueryRuntimeStatistics",
+                                                        "enabled": true,
+                                                        "destinationTable": "ResourceSpecific"
+                                                    },
+                                                    {
+                                                        "category": "PartitionKeyStatistics",
+                                                        "enabled": true,
+                                                        "destinationTable": "ResourceSpecific"
+                                                    },
+                                                    {
+                                                        "category": "PartitionKeyRUConsumption",
+                                                        "enabled": true,
+                                                        "destinationTable": "ResourceSpecific"
+                                                    }
+                                                ],
+                                                "metrics": [
+                                                    {
+                                                        "category": "AllMetrics",
+                                                        "enabled": true,
+                                                        "retentionPolicy": {
+                                                            "enabled": false,
+                                                            "days": 0
+                                                        },
+                                                        "destinationTable": "ResourceSpecific"
+                                                    }
+                                                ],
+                                                "workspaceId": "[parameters('workspaces_LogAnCosmosDB_externalid')]"
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "runAfter": {
+                                "Parse_JSON": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "else": {
+                                "actions": {}
+                            },
+                            "expression": {
+                                "and": [
+                                    {
+                                        "less": [
+                                            "@int(replace(outputs('Compose_Formatea_cadena_String'), ',', ''))",
+                                            0
+                                        ]
+                                    }
+                                ]
+                            },
+                            "type": "If"
+                        }
+                    },
+                    "outputs": {}
+                },
+                "parameters": {
+                    "$connections": {
+                        "value": {
+                            "office365": {
+                                "connectionId": "[parameters('connections_office365_externalid')]",
+                                "connectionName": "office365"
+                            },
+                            "azureautomation": {
+                                "connectionId": "[parameters('connections_azureautomation_externalid')]",
+                                "connectionName": "azureautomation"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    ]
+}
